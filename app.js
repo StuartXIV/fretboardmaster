@@ -8,13 +8,16 @@ const icons = document.querySelectorAll("i");
 const computer_choice = document.getElementById("computer-choice");
 const player_choice = document.getElementById("player-choice");
 const player_choices = Array.from(document.querySelectorAll(".note-choice"));
-let timer = document.getElementById("timer");
+let countdown = document.getElementById("countdown");
 let scoreBoard = document.getElementById("score");
 let streakBoard = document.getElementById("streak");
+const restartBtn = document.getElementById("restart");
 
 let scorePlayer = 0;
 let countQuestions = 0;
 let streak = 0;
+let timer_is_active = false;
+let redIcon;
 
 
 
@@ -32,7 +35,8 @@ function onLoad(){
     header.style.fontSize = "7vh";
     computer_choice.innerHTML = "";
     setTimeout(() => { bass.style.transform = "translateX(0px)";}, 500);
-    setTimeout(() => { button.style.opacity = "1"; }, 1000);      
+    setTimeout(() => { button.style.opacity = "1"; }, 1000);
+    countdown.innerHTML = `10:00`;     
     
 }
 
@@ -61,15 +65,18 @@ function randomLetter (){
 function previousNumber (x){    
     previous_note = document.getElementById(x);
     computer_choice.innerHTML = notes[x];      
-    
+    redIcon = previous_note;
 };
 
 document.getElementById('button').addEventListener("click", function(){
     
     // activateChoices();
-    activateTimer();
-    countQuestions++;    
-    scoreBoard.innerHTML = `Score: ${scorePlayer} / ${countQuestions}`;
+    if (!timer_is_active) {
+        startTimer(); 
+        timer_is_active = true;
+    };
+
+    scoreBoard.innerHTML = `${scorePlayer} / ${countQuestions}`;
     audio.src = "./audio/f1.mp3";   
     changeButtonToSkip(); 
     previous_note.style.opacity = "0";
@@ -95,15 +102,57 @@ function changeButtonToPlay(){
 
 // ACTIVATE THE TIMER! ----------------------------------------------------------------------------------
 
-function activateTimer(){
-    console.log("jim");
-    setInterval(myTimer, 1000);
+let update_time = null;
+const startingMinutes = 0.1;
+let time = startingMinutes * 60;
 
-    function myTimer() {
-        const d = new Date();
-        timer.innerHTML = `Timer: ${d.toLocaleTimeString()}`;
+function startTimer(){
+    if (countdown.innerHTML === "00:00"){        
+    clearInterval(update_time);
+    console.log("fuck sake");
+    } else {
+    update_time= setInterval(updateCountdown, 1000);   
+    } 
+};    
+
+function stopTimer(){
+    clearInterval(update_time);
 }
-};
+
+function updateCountdown(){
+    if (countdown.innerHTML === "00:00"){
+        stopTimer();
+    } else {
+    let minutes = Math.floor(time / 60);
+    let seconds = time % 60;
+    seconds = seconds < 10 ? '0' + seconds : seconds;
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    if (minutes < 1 && seconds <=10){
+        countdown.style.background = "darkred";
+    } else {
+        countdown.style.background = "#b96d41";
+    }
+    countdown.innerHTML = `${minutes}:${seconds}`;
+    time--;
+    }
+}
+
+// RESTART BUTTON ---------------------------------------------------------------------------------------
+console.log(restartBtn);
+restartBtn.addEventListener("click", function restartGame(){
+    clearInterval(update_time);
+    countdown.innerHTML = "10:00";
+    streak = 0;
+    timer_is_active = false;
+    time = startingMinutes * 60;
+    countdown.style.background = "#b96d41";
+    changeButtonToPlay();
+    redIcon.style.opacity = "0";
+    scorePlayer = 0;
+    countQuestions = 0;
+    streak = 0;
+});
+
 
 //PLAYERS CHOICE ----------------------------------------------------------------------
 
@@ -116,7 +165,8 @@ player_choices.forEach(item => {
         console.log(letters[index_of_choice].toUpperCase());
         computer_choice.style.opacity = "1";
         changeColor();        
-        changeButtonToPlay();
+        changeButtonToPlay();        
+        previous_note.style.opacity = "0";
     })
 })
 // }
@@ -127,13 +177,14 @@ function changeColor(){
         earnPoint(); 
     } else {
         player_choice.style.background = "red";
-    }
+    }    
+    countQuestions++;    
     streakCount();
 };
 
 function earnPoint(){   ////////////////NOT WORKING!!!
     scorePlayer++;
-    scoreBoard.innerHTML = `Score: ${scorePlayer} / ${countQuestions}`;    
+    scoreBoard.innerHTML = `${scorePlayer} / ${countQuestions}`;    
 }
 
 function streakCount(){
@@ -144,7 +195,7 @@ function streakCount(){
         console.log("streak lost!");
         streak -= streak;
     }
-    streakBoard.innerHTML = `Streak: ${streak}`;
+    streakBoard.innerHTML = `${streak}`;
 }
 
 

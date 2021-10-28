@@ -21,9 +21,10 @@
         </section>
         <main>
             <div class="score-time-box">
-                <div class="score" id="score">Score: 0 / 0</div>
-                <div class="streak" id="streak">Streak: 0</div>
-                <div class="timer" id="timer">Timer: 00:00</div>
+                <div class="score">Score <label class="label" id="score">0 / 0</label></div>
+                <div class="streak">Streak <label class="label" id="streak">0</label></div>
+                <div class="timer" id="timer">Timer <label id="countdown" class="label"></label></div>
+                <div class="restart"><button id="restart">RESTART</button></div>
             </div>
             <div class="bass-container">
                 <audio src="./audio/f1.mp3" controls></audio>
@@ -142,7 +143,11 @@
                 </div>
             </div>
         </main>
-        <section class="guess-container">            
+        <section class="guess-container">  
+            
+            <div class="box" id="player-choice">
+                
+            </div>
             
             <div class="note-choices">
                 <div class="note-choice" id="c"><div>C</div></div>
@@ -159,9 +164,7 @@
                 <div class="note-choice" id="b"><div>B</div></div>
             </div>
 
-            <div class="box" id="player-choice">
-                
-            </div>
+            
 
             <div class="box" id="computer-choice">
                 

@@ -178,11 +178,32 @@ img {
   align-items: center;  
   color: white;
   text-shadow: 1px 1px 1px #222222;
-  font-size: 4vh;
+  font-size: 3vh;
 }
 
-.score-time-box .timer {
-  width: 100%;
+#restart {
+  font-size: 2vh;
+  border: 3px solid #297416ec; 
+  background: white;
+  color: #297416ec;
+  padding: 0.3rem 2rem;
+  border-radius: 10px;
+  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.288);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+#restart:active {
+  box-shadow:none;
+  filter: brightness(0.95);
+}
+
+.score-time-box .label {
+  background-color: #b96d41;
+  border: 2px solid white;
+  padding: 0 1rem;
+  margin-left: 0.5rem;
+  border-radius: 20px;
 }
 
 #button {
